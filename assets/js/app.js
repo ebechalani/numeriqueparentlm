@@ -74,11 +74,12 @@
     try { return new URL(url).host !== location.host; } catch (e) { return true; }
   }
 
-  // Mise en forme légère : **gras** et liens automatiques, appliqués sur du texte déjà échappé.
+  // Mise en forme légère : **gras**, liens et adresses e-mail automatiques, appliqués sur du texte déjà échappé.
   function inline(str) {
     return escapeHtml(typo(str))
       .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-      .replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)»])/g, function (url) {
+      .replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)»])|([\w.+-]+@[\w-]+(?:\.[\w-]+)+)/g, function (match, url, email) {
+        if (email) return '<a href="mailto:' + email + '">' + email + "</a>";
         return '<a href="' + url + '" target="_blank" rel="noopener">' + url + "</a>";
       });
   }
@@ -188,6 +189,7 @@
       item.text ? richText(item.text) : null,
       pointList(item.points),
       dateList(item.dates),
+      item.note ? el("p", { className: "card-note", text: item.note }) : null,
       linkList(item.links),
       item.doc ? docButton(item.doc) : null
     ]);

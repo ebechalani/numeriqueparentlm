@@ -524,6 +524,8 @@ main:focus { outline: none; }
 .group-after { margin-top: 16px; }
 .group-after .card { max-width: 560px; }
 
+.card-note { font-size: .9rem; color: var(--ink-3); }
+
 /* ---------- Bouton document PDF ---------- */
 
 .doc-link {
