@@ -231,7 +231,7 @@ window.SITE_CONTENT = {
               points: [
                 "Avec mention des frais : courriel au service financier (nom de l’enfant, classe, année).",
                 "Retrait au service financier 5 jours après réception, par vous ou un tiers désigné.",
-                "Sans mention des frais : courriel au secrétariat, Direction en copie ; retrait à l’accueil du bâtiment A après 2 jours.",
+                "Sans mention des frais : courriel au secrétariat, Direction en copie ; retrait à l’accueil du bâtiment A après 2 jours (délai plus long pendant les vacances d’été).",
                 "Si un formulaire spécifique est exigé, joindre une copie numérisée au courriel de demande."
               ],
               doc: { file: "assets/docs/demande-attestation-scolaire.pdf", pages: 1, size: "154 Ko" }

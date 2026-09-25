@@ -264,6 +264,7 @@ main:focus { outline: none; }
 .nav-toggle {
   display: none;
   position: relative;
+  flex-shrink: 0;
   width: 44px; height: 44px;
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -628,7 +629,7 @@ main:focus { outline: none; }
 
 .dates {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+  grid-template-columns: 1fr;
   gap: 10px;
   margin: 4px 0 0;
 }
@@ -644,6 +645,8 @@ main:focus { outline: none; }
   font-weight: 600;
   color: var(--ink);
 }
+@media (min-width: 560px) { .dates { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .dates { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .date-item {
   padding: 12px 14px;
   background: var(--bg);
@@ -860,7 +863,7 @@ main:focus { outline: none; }
 .partners .logo-mlf { height: 43px; }
 .partners .logo-aefe { height: 64px; }
 
-@media (max-width: 640px) {
+@media (max-width: 760px) {
   .partners { padding: 22px 0; }
   .partners-inner { flex-direction: column; gap: 18px; }
   .partners-sep { display: none; }
@@ -868,6 +871,13 @@ main:focus { outline: none; }
   .partners .logo-15 { height: 53px; }
   .partners .logo-mlf { height: 32px; }
   .partners .logo-aefe { height: 47px; }
+}
+
+/* Mode contraste élevé (Windows) : on garde le fond blanc sous les logos. */
+@media (forced-colors: active) {
+  .brand-logo, .partners-group { forced-color-adjust: none; background: #fff; border-radius: 10px; }
+  .brand-logo { padding: 4px 8px; }
+  .partners-group { padding: 12px 20px; }
 }
 
 /* En mode sombre, les logos (fond blanc) sont posés sur des cartes blanches. */
@@ -924,6 +934,10 @@ main:focus { outline: none; }
   font-size: .85rem;
 }
 .footer-credit { color: var(--footer-ink); font-weight: 500; }
+/* Laisse la place au bouton « retour en haut » (fixé en bas à droite) quand la page est défilée jusqu’au bout. */
+@media (min-width: 600px) and (max-width: 1240px) {
+  .footer-bottom { padding-right: 64px; }
+}
 
 /* ---------- Divers ---------- */
 
@@ -965,12 +979,14 @@ main:focus { outline: none; }
 }
 .toast.is-visible { opacity: 1; transform: none; }
 
-.fallback { display: none; }
-.no-js .fallback { display: block; padding-top: 48px; padding-bottom: 48px; }
-.no-js .hero,
-.no-js .nav-toggle,
-.no-js .site-nav,
-.no-js .footer-sources { display: none; }
+/* Message de secours : masqué (attribut hidden) sauf si le contenu n’a pas pu s’afficher. */
+.fallback { padding-top: 48px; padding-bottom: 48px; }
+.fallback-title { font-size: 1.75rem; margin-bottom: 12px; }
+.render-failed .hero,
+.render-failed .nav-toggle,
+.render-failed .site-nav,
+.render-failed .footer-sources,
+.render-failed .footer-bottom { display: none; }
 
 /* ---------- Impression ---------- */
 

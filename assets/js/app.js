@@ -2,10 +2,19 @@
 (function () {
   "use strict";
 
+  // Message de secours avec les liens vers les padlets, affiché seulement en cas d'échec.
+  function showFallback() {
+    var fallback = document.querySelector(".fallback");
+    if (fallback) fallback.hidden = false;
+    document.documentElement.className += " render-failed";
+  }
+
   var data = window.SITE_CONTENT;
-  // Sans contenu (fichier absent ou erreur de syntaxe), la classe « no-js » reste en place
-  // et la page affiche le message de secours avec les liens vers les padlets.
-  if (!data) return;
+  // content.js absent ou illisible (virgule oubliée…) : on affiche le message de secours.
+  if (!data) {
+    showFallback();
+    return;
+  }
   data.meta = data.meta || {};
   data.hero = data.hero || {};
   data.sections = data.sections || [];
@@ -102,21 +111,22 @@
   }
 
   // Adresses web et e-mail repérées dans le texte brut, avant tout échappement.
-  var AUTO_LINK = /(https?:\/\/[^\s<>"'«»]*[^\s<>"'«».,;:!?)])|([\w.+-]+@[\w-]+(?:\.[\w-]+)+)/g;
+  var AUTO_LINK = /(https?:\/\/[^\s<>"«»]*[^\s<>"'«».,;:!?)*])|([\w.+-]+@[\w-]+(?:\.[\w-]+)+)/g;
 
-  function formatText(str) {
-    return escapeHtml(typo(str)).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  // Mise en forme légère : **gras** d'abord, puis liens et adresses e-mail automatiques dans chaque morceau.
+  function inline(str) {
+    return String(str).split(/\*\*(.+?)\*\*/).map(function (part, i) {
+      return i % 2 ? "<strong>" + linkify(part) + "</strong>" : linkify(part);
+    }).join("");
   }
 
-  // Mise en forme légère : **gras**, liens et adresses e-mail automatiques.
-  function inline(str) {
-    var source = String(str);
+  function linkify(source) {
     var html = "";
     var last = 0;
     var m;
     AUTO_LINK.lastIndex = 0;
     while ((m = AUTO_LINK.exec(source))) {
-      html += formatText(source.slice(last, m.index));
+      html += escapeHtml(typo(source.slice(last, m.index)));
       if (m[2]) {
         html += '<a href="mailto:' + escapeHtml(m[2]) + '">' + escapeHtml(m[2]) + "</a>";
       } else {
@@ -125,7 +135,7 @@
       }
       last = AUTO_LINK.lastIndex;
     }
-    return html + formatText(source.slice(last));
+    return html + escapeHtml(typo(source.slice(last)));
   }
 
   // Paragraphes séparés par une ligne vide ; lignes « - » en liste à puces, « 1. » en liste numérotée.
@@ -196,15 +206,16 @@
     var meta = ["PDF"];
     if (doc.pages) meta.push(doc.pages + (doc.pages > 1 ? " pages" : " page"));
     if (doc.size) meta.push(doc.size);
-    return el("a", { className: "doc-link", href: url, target: "_blank", rel: "noopener" }, [
+    var action = doc.label || "Ouvrir le document";
+    // Le nom lu par les lecteurs d'écran commence par le libellé visible et cite le titre de la carte :
+    // chaque bouton a ainsi un nom distinct.
+    var name = action + (title ? " : " + title : "") + ", " + meta.join(", ") + " (nouvel onglet)";
+    return el("a", { className: "doc-link", href: url, target: "_blank", rel: "noopener", "aria-label": name }, [
       el("span", { className: "doc-icon" }, [icon("file")]),
       el("span", { className: "doc-text" }, [
-        el("span", { className: "doc-action", text: doc.label || "Ouvrir le document" }),
-        // Le titre de la carte, lu par les lecteurs d'écran : chaque bouton a ainsi un nom distinct.
-        title ? el("span", { className: "visually-hidden", text: " : " + title + ", " }) : null,
+        el("span", { className: "doc-action", text: action }),
         el("span", { className: "doc-meta", text: meta.join(" · ") })
-      ]),
-      newTabHint()
+      ])
     ]);
   }
 
@@ -416,12 +427,13 @@
 
   function toast(message) {
     var t = document.getElementById("toast");
+    clearTimeout(toast.timer);
+    clearTimeout(toast.clearTimer);
     t.textContent = message;
     t.classList.add("is-visible");
-    clearTimeout(toast.timer);
     toast.timer = setTimeout(function () {
       t.classList.remove("is-visible");
-      setTimeout(function () { t.textContent = ""; }, 250);
+      toast.clearTimer = setTimeout(function () { t.textContent = ""; }, 250);
     }, 2600);
   }
 
@@ -528,17 +540,40 @@
 
   // ---------- Démarrage ----------
 
+  // Rubrique qui n'a pas pu s'afficher (erreur de saisie dans content.js) : avis local avec le lien vers le padlet.
+  function sectionError(section) {
+    var url = section.source && safeUrl(section.source.url);
+    return el("section", { className: "section", id: section.id || null }, [
+      el("div", { className: "container" }, [
+        el("h2", { text: section.title || "Rubrique" }),
+        el("p", { className: "section-lead" }, [
+          el("span", { text: "Cette rubrique n’a pas pu s’afficher. " }),
+          url ? el("a", { href: url, target: "_blank", rel: "noopener" }, [
+            el("span", { text: "Consulter le padlet d’origine" }),
+            newTabHint()
+          ]) : null
+        ])
+      ])
+    ]);
+  }
+
   try {
     bindText();
     renderNav();
     renderHero();
     var container = document.getElementById("sections");
-    data.sections.forEach(function (s) { container.appendChild(renderSection(s)); });
+    data.sections.forEach(function (s) {
+      try {
+        container.appendChild(renderSection(s));
+      } catch (err) {
+        if (window.console) console.error(err);
+        container.appendChild(sectionError(s));
+      }
+    });
     renderFooter();
-    // Tout s'est affiché : on retire le message de secours.
-    document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/, "").trim();
   } catch (err) {
     if (window.console) console.error(err);
+    showFallback();
   }
   setupInteractions();
 })();
