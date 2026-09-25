@@ -3,9 +3,28 @@
   "use strict";
 
   var data = window.SITE_CONTENT;
+  // Sans contenu (fichier absent ou erreur de syntaxe), la classe « no-js » reste en place
+  // et la page affiche le message de secours avec les liens vers les padlets.
   if (!data) return;
+  data.meta = data.meta || {};
+  data.hero = data.hero || {};
+  data.sections = data.sections || [];
 
   // ---------- Utilitaires ----------
+
+  // Compatibilité avec les navigateurs anciens (NodeList.forEach, Element.closest).
+  function each(list, fn) {
+    Array.prototype.forEach.call(list, fn);
+  }
+
+  function closest(node, selector) {
+    var matches = Element.prototype.matches || Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+    while (node && node.nodeType === 1) {
+      if (matches.call(node, selector)) return node;
+      node = node.parentNode;
+    }
+    return null;
+  }
 
   function el(tag, attrs, children) {
     var node = document.createElement(tag);
@@ -28,7 +47,6 @@
   function icon(name) {
     var paths = {
       file: "M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm7 1.5V9h5.5L13 3.5ZM8 13h8v1.6H8V13Zm0 3.4h8V18H8v-1.6Z",
-      external: "M14 3h7v7h-2V6.4l-9.3 9.3-1.4-1.4L17.6 5H14V3ZM5 5h6v2H5v12h12v-6h2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z",
       mail: "M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm1 2.2V17h16V7.2l-8 5.3-8-5.3ZM5.3 7 12 11.4 18.7 7H5.3Z",
       pin: "M12 2a7 7 0 0 1 7 7c0 5.2-7 13-7 13S5 14.2 5 9a7 7 0 0 1 7-7Zm0 4.5A2.5 2.5 0 1 0 12 11.5 2.5 2.5 0 0 0 12 6.5Z"
     };
@@ -45,11 +63,20 @@
     return svg;
   }
 
-  // Typographie française : espace fine insécable avant « : ; ? ! » et à l'intérieur des guillemets.
+  function newTabHint() {
+    return el("span", { className: "visually-hidden", text: " (nouvel onglet)" });
+  }
+
+  // Typographie française, appliquée au texte (jamais aux adresses web) :
+  // espace fine insécable avant « : ; ? ! » et dans les guillemets ;
+  // pas de retour à la ligne dans « 2026-2027 », « 1 h 45 », « 31 octobre », « 48 heures ».
   function typo(str) {
     return String(str)
-      .replace(/ ([:;?!»])/g, "\u202f$1")
-      .replace(/« /g, "«\u202f");
+      .replace(/ ([:;?!»])/g, " $1")
+      .replace(/« /g, "« ")
+      .replace(/(\d)-(\d)/g, "$1-⁠$2")
+      .replace(/(\d) h (\d)/g, "$1 h $2")
+      .replace(/(\d) (?=[A-Za-zÀ-ÿ])/g, "$1 ");
   }
 
   function escapeHtml(str) {
@@ -74,14 +101,31 @@
     try { return new URL(url).host !== location.host; } catch (e) { return true; }
   }
 
-  // Mise en forme légère : **gras**, liens et adresses e-mail automatiques, appliqués sur du texte déjà échappé.
+  // Adresses web et e-mail repérées dans le texte brut, avant tout échappement.
+  var AUTO_LINK = /(https?:\/\/[^\s<>"'«»]*[^\s<>"'«».,;:!?)])|([\w.+-]+@[\w-]+(?:\.[\w-]+)+)/g;
+
+  function formatText(str) {
+    return escapeHtml(typo(str)).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  }
+
+  // Mise en forme légère : **gras**, liens et adresses e-mail automatiques.
   function inline(str) {
-    return escapeHtml(typo(str))
-      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-      .replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)»])|([\w.+-]+@[\w-]+(?:\.[\w-]+)+)/g, function (match, url, email) {
-        if (email) return '<a href="mailto:' + email + '">' + email + "</a>";
-        return '<a href="' + url + '" target="_blank" rel="noopener">' + url + "</a>";
-      });
+    var source = String(str);
+    var html = "";
+    var last = 0;
+    var m;
+    AUTO_LINK.lastIndex = 0;
+    while ((m = AUTO_LINK.exec(source))) {
+      html += formatText(source.slice(last, m.index));
+      if (m[2]) {
+        html += '<a href="mailto:' + escapeHtml(m[2]) + '">' + escapeHtml(m[2]) + "</a>";
+      } else {
+        html += '<a href="' + escapeHtml(m[1]) + '" target="_blank" rel="noopener">' + escapeHtml(m[1]) +
+          '<span class="visually-hidden"> (nouvel onglet)</span></a>';
+      }
+      last = AUTO_LINK.lastIndex;
+    }
+    return html + formatText(source.slice(last));
   }
 
   // Paragraphes séparés par une ligne vide ; lignes « - » en liste à puces, « 1. » en liste numérotée.
@@ -124,7 +168,7 @@
   }
 
   function linkList(links) {
-    var valid = (links || []).filter(function (l) { return safeUrl(l.url); });
+    var valid = (links || []).filter(function (l) { return l && safeUrl(l.url); });
     if (!valid.length) return null;
     return el("ul", { className: "link-list" }, valid.map(function (l) {
       var url = safeUrl(l.url);
@@ -139,14 +183,14 @@
         }, [
           mail ? icon("mail") : null,
           el("span", { text: l.label || url }),
-          ext ? el("span", { className: "visually-hidden", text: " (nouvel onglet)" }) : null,
+          ext ? newTabHint() : null,
           ext ? el("span", { className: "link-arrow", "aria-hidden": "true", text: "↗" }) : null
         ])
       ]);
     }));
   }
 
-  function docButton(doc) {
+  function docButton(doc, title) {
     var url = safeUrl(doc.file);
     if (!url) return null;
     var meta = ["PDF"];
@@ -156,9 +200,11 @@
       el("span", { className: "doc-icon" }, [icon("file")]),
       el("span", { className: "doc-text" }, [
         el("span", { className: "doc-action", text: doc.label || "Ouvrir le document" }),
+        // Le titre de la carte, lu par les lecteurs d'écran : chaque bouton a ainsi un nom distinct.
+        title ? el("span", { className: "visually-hidden", text: " : " + title + ", " }) : null,
         el("span", { className: "doc-meta", text: meta.join(" · ") })
       ]),
-      el("span", { className: "visually-hidden", text: " (nouvel onglet)" })
+      newTabHint()
     ]);
   }
 
@@ -191,7 +237,7 @@
       dateList(item.dates),
       item.note ? el("p", { className: "card-note", text: item.note }) : null,
       linkList(item.links),
-      item.doc ? docButton(item.doc) : null
+      item.doc ? docButton(item.doc, item.title) : null
     ]);
   }
 
@@ -206,7 +252,8 @@
           href: url,
           target: "_blank",
           rel: "noopener",
-          "aria-label": (item.title || item.label) + ", code " + code + " (nouvel onglet)"
+          // Le nom accessible commence par le libellé visible (« 6e », « Tle »…).
+          "aria-label": item.label + (item.title ? " : " + item.title : "") + ", code " + code + " (nouvel onglet)"
         }, [
           el("span", { className: "level-label", text: item.label }),
           el("span", { className: "level-caption", text: group.itemCaption || "" }),
@@ -239,7 +286,7 @@
       group.title ? el("h3", { className: "group-title", text: group.title }) : null,
       group.intro ? el("p", { className: "group-intro", text: group.intro }) : null,
       body,
-      group.after ? el("div", { className: "group-after" }, (group.after || []).map(renderCard)) : null
+      group.after ? el("div", { className: "group-after" }, group.after.map(renderCard)) : null
     ]);
   }
 
@@ -248,8 +295,8 @@
       callout.title ? el("p", { className: "callout-title", text: callout.title }) : null,
       richText(callout.text, "callout-text"),
       callout.highlight ? el("p", { className: "callout-highlight" }, [
-        el("span", { className: "callout-highlight-label" }, [icon("pin"), el("span", { text: callout.highlight.label })]),
-        el("span", { text: callout.highlight.text })
+        el("span", { className: "callout-highlight-label" }, [icon("pin"), el("span", { text: callout.highlight.label + " :" })]),
+        el("span", { text: " " + callout.highlight.text })
       ]) : null
     ]);
   }
@@ -285,7 +332,10 @@
     if (srcUrl) {
       footer = el("p", { className: "section-source" }, [
         el("span", { text: "Source : " }),
-        el("a", { href: srcUrl, target: "_blank", rel: "noopener", text: section.source.label }),
+        el("a", { href: srcUrl, target: "_blank", rel: "noopener" }, [
+          el("span", { text: section.source.label }),
+          newTabHint()
+        ]),
         section.source.author ? el("span", { text: ", par " + section.source.author }) : null
       ]);
     }
@@ -321,7 +371,8 @@
       panel.appendChild(el("div", { className: "quick-links" }, [
         el("p", { className: "quick-links-title", text: "Accès rapide" }),
         el("ul", null, quick.map(function (q) {
-          return el("li", null, [el("a", { href: q.href, text: q.label })]);
+          var href = q && safeUrl(q.href);
+          return href ? el("li", null, [el("a", { href: href, text: q.label })]) : null;
         }))
       ]));
     }
@@ -340,19 +391,22 @@
       var url = s.source && safeUrl(s.source.url);
       if (!url) return;
       sources.appendChild(el("li", null, [
-        el("a", { href: url, target: "_blank", rel: "noopener", text: s.source.label }),
+        el("a", { href: url, target: "_blank", rel: "noopener" }, [
+          el("span", { text: s.source.label }),
+          newTabHint()
+        ]),
         s.source.author ? el("span", { className: "footer-author", text: " · " + s.source.author }) : null
       ]));
     });
     if (data.meta.updated) {
       var d = new Date(data.meta.updated + "T12:00:00");
       var label = isNaN(d) ? data.meta.updated : d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
-      document.getElementById("footer-updated").textContent = "Mise à jour : " + label;
+      document.getElementById("footer-updated").textContent = typo("Mise à jour : " + label);
     }
   }
 
   function bindText() {
-    document.querySelectorAll("[data-bind]").forEach(function (node) {
+    each(document.querySelectorAll("[data-bind]"), function (node) {
       var value = get(node.getAttribute("data-bind"));
       if (value != null) node.textContent = typo(value);
     });
@@ -365,20 +419,32 @@
     t.textContent = message;
     t.classList.add("is-visible");
     clearTimeout(toast.timer);
-    toast.timer = setTimeout(function () { t.classList.remove("is-visible"); }, 2600);
+    toast.timer = setTimeout(function () {
+      t.classList.remove("is-visible");
+      setTimeout(function () { t.textContent = ""; }, 250);
+    }, 2600);
+  }
+
+  function copyLink(url) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(
+        function () { toast("Lien copié dans le presse-papiers"); },
+        function () { window.prompt("Copiez le lien de la page :", url); }
+      );
+    } else {
+      window.prompt("Copiez le lien de la page :", url);
+    }
   }
 
   function share() {
-    var payload = { title: document.title, url: location.href.split("#")[0] };
+    var url = location.href.split("#")[0];
     if (navigator.share) {
-      navigator.share(payload).catch(function () {});
-    } else if (navigator.clipboard) {
-      navigator.clipboard.writeText(payload.url).then(
-        function () { toast("Lien copié dans le presse-papiers"); },
-        function () { toast(payload.url); }
-      );
+      navigator.share({ title: document.title, url: url }).catch(function (err) {
+        // Partage annulé par l'utilisateur : rien à faire. Autre refus : on propose de copier le lien.
+        if (!err || err.name !== "AbortError") copyLink(url);
+      });
     } else {
-      toast(payload.url);
+      copyLink(url);
     }
   }
 
@@ -387,34 +453,49 @@
     var toggle = document.querySelector(".nav-toggle");
     var nav = document.getElementById("site-nav");
 
+    function isOpen() {
+      return nav.classList.contains("is-open");
+    }
     function closeNav() {
       toggle.setAttribute("aria-expanded", "false");
       nav.classList.remove("is-open");
     }
     toggle.addEventListener("click", function () {
-      var open = toggle.getAttribute("aria-expanded") !== "true";
+      var open = !isOpen();
       toggle.setAttribute("aria-expanded", String(open));
       nav.classList.toggle("is-open", open);
     });
     nav.addEventListener("click", function (e) {
-      if (e.target.closest("a")) closeNav();
+      if (closest(e.target, "a")) closeNav();
+    });
+    // Le menu mobile se referme quand le focus le quitte (tabulation au-delà du dernier lien).
+    nav.addEventListener("focusout", function (e) {
+      if (isOpen() && e.relatedTarget && !nav.contains(e.relatedTarget) && e.relatedTarget !== toggle) closeNav();
     });
     document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") closeNav();
+      if ((e.key === "Escape" || e.key === "Esc") && isOpen()) {
+        var focusInside = nav.contains(document.activeElement);
+        closeNav();
+        if (focusInside) toggle.focus();
+      }
     });
 
     document.addEventListener("click", function (e) {
-      var btn = e.target.closest("[data-action]");
+      // Un toucher en dehors du menu ouvert le referme.
+      if (isOpen() && !closest(e.target, ".site-nav") && !closest(e.target, ".nav-toggle")) closeNav();
+
+      var btn = closest(e.target, "[data-action]");
       if (!btn) return;
       var action = btn.getAttribute("data-action");
       if (action === "print") window.print();
       if (action === "share") share();
-      if (action === "top") window.scrollTo({ top: 0, behavior: "smooth" });
+      // Sans option : le navigateur applique scroll-behavior (animation désactivée si l'utilisateur le demande).
+      if (action === "top") window.scrollTo(0, 0);
     });
 
     var toTop = document.querySelector(".to-top");
     function onScroll() {
-      var y = window.scrollY;
+      var y = window.pageYOffset;
       header.classList.toggle("is-scrolled", y > 8);
       toTop.hidden = y < 600;
     }
@@ -424,7 +505,7 @@
     // Surligne la rubrique en cours de lecture dans le menu.
     if ("IntersectionObserver" in window) {
       var links = {};
-      nav.querySelectorAll("a").forEach(function (a) { links[a.getAttribute("href").slice(1)] = a; });
+      each(nav.querySelectorAll("a"), function (a) { links[a.getAttribute("href").slice(1)] = a; });
       var observer = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
           var link = links[entry.target.id];
@@ -447,17 +528,17 @@
 
   // ---------- Démarrage ----------
 
-  bindText();
-  renderNav();
-  renderHero();
-  var container = document.getElementById("sections");
-  data.sections.forEach(function (s) { container.appendChild(renderSection(s)); });
-  renderFooter();
-  setupInteractions();
-
-  // Arrivée directe sur une ancre (#rentree…) : le contenu vient d'être généré, on s'y replace.
-  if (location.hash.length > 1) {
-    var target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-    if (target) target.scrollIntoView();
+  try {
+    bindText();
+    renderNav();
+    renderHero();
+    var container = document.getElementById("sections");
+    data.sections.forEach(function (s) { container.appendChild(renderSection(s)); });
+    renderFooter();
+    // Tout s'est affiché : on retire le message de secours.
+    document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/, "").trim();
+  } catch (err) {
+    if (window.console) console.error(err);
   }
+  setupInteractions();
 })();

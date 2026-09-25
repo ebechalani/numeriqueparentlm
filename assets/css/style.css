@@ -2,13 +2,31 @@
    Espace parents · Lycée Montaigne
    ========================================================================== */
 
+/* Polices hébergées avec le site (licence SIL OFL, voir assets/fonts/). */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../fonts/inter-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../fonts/fraunces-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   --bg: #f6f4ef;
   --surface: #ffffff;
   --surface-2: #efebe2;
   --ink: #1a2233;
   --ink-2: #4b5467;
-  --ink-3: #6e7688;
+  --ink-3: #5f6779;
   --line: #e1dbcf;
   --line-strong: #cfc7b7;
 
@@ -17,8 +35,15 @@
   --on-brand: #ffffff;
   --footer-bg: #1f3a68;
   --footer-ink: #ffffff;
+  --footer-ink-2: rgba(255, 255, 255, .82);
+  --footer-line: rgba(255, 255, 255, .2);
 
-  --rentree: #b0532b;
+  --bg-alt: #f3f0e9;
+  --header-bg: rgba(246, 244, 239, .88);
+  --hero-glow-1: rgba(31, 58, 104, .10);
+  --hero-glow-2: rgba(160, 74, 37, .08);
+
+  --rentree: #a04a25;
   --rentree-soft: #f6e6dc;
   --ia: #22706f;
   --ia-soft: #dcefec;
@@ -35,7 +60,8 @@
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
+/* Le thème sombre ne concerne que l'écran : l'impression reste toujours claire. */
+@media screen and (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0f1420;
     --surface: #171e2d;
@@ -51,6 +77,13 @@
     --on-brand: #0f1420;
     --footer-bg: #0a0e17;
     --footer-ink: #e9ecf3;
+    --footer-ink-2: rgba(233, 236, 243, .82);
+    --footer-line: rgba(233, 236, 243, .2);
+
+    --bg-alt: #151c2a;
+    --header-bg: rgba(15, 20, 32, .88);
+    --hero-glow-1: rgba(143, 176, 234, .10);
+    --hero-glow-2: rgba(236, 154, 116, .08);
 
     --rentree: #ec9a74;
     --rentree-soft: #3a2519;
@@ -152,7 +185,7 @@ main:focus { outline: none; }
   position: sticky;
   top: 0;
   z-index: 50;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  background: var(--header-bg);
   backdrop-filter: saturate(160%) blur(12px);
   -webkit-backdrop-filter: saturate(160%) blur(12px);
   border-bottom: 1px solid transparent;
@@ -178,22 +211,35 @@ main:focus { outline: none; }
   text-decoration: none;
   color: var(--ink);
 }
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 42px; height: 42px;
-  border-radius: 11px;
-  background: var(--brand);
-  color: var(--on-brand);
-  font-family: var(--font-serif);
-  font-weight: 700;
-  font-size: 1.05rem;
-  letter-spacing: .02em;
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
   flex-shrink: 0;
 }
-.brand-text { display: flex; flex-direction: column; line-height: 1.2; }
-.brand-school { font-family: var(--font-serif); font-weight: 600; font-size: 1.08rem; }
-.brand-sub { font-size: .8rem; color: var(--ink-3); font-weight: 500; letter-spacing: .02em; }
+.brand-logo img {
+  display: block;
+  width: auto;
+  height: 46px;
+}
+/* En mode sombre, le logo (texte bleu marine) est posé sur une pastille blanche. */
+@media screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .brand-logo { padding: 4px 8px; background: #fff; border-radius: 10px; }
+  :root:not([data-theme="light"]) .brand-logo img { height: 38px; }
+}
+.brand-sub {
+  padding-left: 12px;
+  border-left: 1px solid var(--line-strong);
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ink);
+}
+@media (max-width: 400px) {
+  .brand { gap: 10px; }
+  .brand-logo img { height: 40px; }
+  .brand-sub { padding-left: 10px; font-size: .95rem; }
+}
 
 .site-nav ul {
   display: flex;
@@ -266,8 +312,8 @@ main:focus { outline: none; }
 .hero {
   padding: 56px 0 64px;
   background:
-    radial-gradient(900px 400px at 85% -10%, color-mix(in srgb, var(--brand) 10%, transparent), transparent 70%),
-    radial-gradient(700px 360px at -5% 110%, color-mix(in srgb, var(--rentree) 8%, transparent), transparent 70%);
+    radial-gradient(900px 400px at 85% -10%, var(--hero-glow-1), transparent 70%),
+    radial-gradient(700px 360px at -5% 110%, var(--hero-glow-2), transparent 70%);
 }
 .hero-inner {
   display: grid;
@@ -414,7 +460,7 @@ main:focus { outline: none; }
   padding: 72px 0;
   border-top: 1px solid var(--line);
 }
-.section:nth-child(even) { background: color-mix(in srgb, var(--surface-2) 45%, var(--bg)); }
+.section:nth-child(even) { background: var(--bg-alt); }
 @media (min-width: 900px) { .section { padding: 96px 0; } }
 
 .section-head { max-width: 720px; margin-bottom: 40px; }
@@ -503,7 +549,6 @@ main:focus { outline: none; }
   box-shadow: var(--shadow);
 }
 .card-head { display: flex; flex-wrap: wrap; gap: 6px; }
-.card-head:empty { display: none; }
 .card-title { font-size: 1.2rem; }
 
 .badge {
@@ -627,10 +672,6 @@ main:focus { outline: none; }
 }
 .callout-text { font-size: 1.05rem; }
 .callout-highlight {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 6px 12px;
   margin-top: 16px;
   padding: 12px 16px;
   border-radius: var(--radius-sm);
@@ -640,6 +681,7 @@ main:focus { outline: none; }
 }
 .callout-highlight-label {
   display: inline-flex;
+  vertical-align: baseline;
   align-items: center;
   gap: 6px;
   color: var(--accent);
@@ -722,7 +764,8 @@ main:focus { outline: none; }
   top: 10px; bottom: 10px;
   left: 7px;
   width: 2px;
-  background: color-mix(in srgb, var(--accent) 30%, var(--line));
+  background: var(--accent);
+  opacity: .35;
 }
 .timeline li {
   position: relative;
@@ -785,11 +828,61 @@ main:focus { outline: none; }
 .link-arrow { transition: transform .15s; }
 .link-pill:hover .link-arrow { transform: translate(2px, -1px); }
 
+/* ---------- Logos de l’établissement et des réseaux ---------- */
+
+.partners {
+  padding: 28px 0;
+  background: #fff;
+  border-top: 1px solid var(--line);
+}
+.partners-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 20px 40px;
+}
+.partners-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px 36px;
+}
+.partners-sep {
+  width: 1px;
+  height: 64px;
+  background: #d9d4c8;
+}
+/* Mêmes proportions que la bannière d’origine. */
+.partners img { display: block; width: auto; }
+.partners .logo-lm { height: 60px; }
+.partners .logo-15 { height: 72px; }
+.partners .logo-mlf { height: 43px; }
+.partners .logo-aefe { height: 64px; }
+
+@media (max-width: 640px) {
+  .partners { padding: 22px 0; }
+  .partners-inner { flex-direction: column; gap: 18px; }
+  .partners-sep { display: none; }
+  .partners .logo-lm { height: 44px; }
+  .partners .logo-15 { height: 53px; }
+  .partners .logo-mlf { height: 32px; }
+  .partners .logo-aefe { height: 47px; }
+}
+
+/* En mode sombre, les logos (fond blanc) sont posés sur des cartes blanches. */
+@media screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .partners { background: var(--bg); }
+  :root:not([data-theme="light"]) .partners-inner { align-items: stretch; }
+  :root:not([data-theme="light"]) .partners-group { padding: 12px 20px; background: #fff; border-radius: 14px; }
+  :root:not([data-theme="light"]) .partners-sep { display: none; }
+}
+
 /* ---------- Pied de page ---------- */
 
 .site-footer {
   background: var(--footer-bg);
-  color: color-mix(in srgb, var(--footer-ink) 82%, transparent);
+  color: var(--footer-ink-2);
   padding: 48px 0;
   font-size: .95rem;
 }
@@ -819,6 +912,7 @@ main:focus { outline: none; }
 .footer-links { list-style: none; margin: 0; padding: 0; }
 .footer-links li + li { margin-top: 6px; }
 .site-footer a { color: var(--footer-ink); }
+.site-footer :focus-visible { outline-color: var(--footer-ink); }
 .footer-author { opacity: .75; }
 .footer-bottom {
   display: flex;
@@ -826,7 +920,7 @@ main:focus { outline: none; }
   justify-content: space-between;
   gap: 8px 24px;
   padding-top: 20px;
-  border-top: 1px solid color-mix(in srgb, var(--footer-ink) 20%, transparent);
+  border-top: 1px solid var(--footer-line);
   font-size: .85rem;
 }
 .footer-credit { color: var(--footer-ink); font-weight: 500; }
@@ -851,24 +945,32 @@ main:focus { outline: none; }
 
 .toast {
   position: fixed;
-  left: 50%; bottom: 24px;
+  left: 16px; right: 16px; bottom: 24px;
   z-index: 60;
+  width: max-content;
   max-width: calc(100% - 32px);
+  margin: 0 auto;
   padding: 12px 18px;
   border-radius: 12px;
   background: var(--ink);
   color: var(--bg);
   font-size: .95rem;
   font-weight: 500;
+  overflow-wrap: anywhere;
   box-shadow: var(--shadow-lg);
-  transform: translate(-50%, 20px);
+  transform: translateY(20px);
   opacity: 0;
   pointer-events: none;
   transition: opacity .2s, transform .2s;
 }
-.toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+.toast.is-visible { opacity: 1; transform: none; }
 
-.noscript { padding: 48px 16px; }
+.fallback { display: none; }
+.no-js .fallback { display: block; padding-top: 48px; padding-bottom: 48px; }
+.no-js .hero,
+.no-js .nav-toggle,
+.no-js .site-nav,
+.no-js .footer-sources { display: none; }
 
 /* ---------- Impression ---------- */
 
@@ -881,7 +983,9 @@ main:focus { outline: none; }
   .hero { padding: 16px 0 24px; background: none; }
   .hero-inner { display: block; }
   .section { padding: 24px 0; background: none !important; }
-  .card, .level-tile, .callout { break-inside: avoid; box-shadow: none; }
+  .card, .level-tile, .callout, .partners { break-inside: avoid; box-shadow: none; }
+  .group-title, .section-head { break-after: avoid; }
+  .section-head { break-inside: avoid; }
   .card-grid { grid-template-columns: 1fr 1fr; }
   .link-pill::after { content: " (" attr(href) ")"; font-weight: 400; font-size: 9pt; word-break: break-all; }
   .site-footer { background: none; color: #333; border-top: 1px solid #ccc; }

@@ -15,7 +15,7 @@ window.SITE_CONTENT = {
   hero: {
     eyebrow: "Année scolaire 2026-2027",
     title: "Toutes les informations utiles aux familles, au même endroit",
-    lead: "Retrouvez ici les documents de la rentrée 2026-2027, les campagnes Pix de votre enfant et le parcours « IA & parentalité » pour l’accompagner dans le numérique.",
+    lead: "Retrouvez ici les documents de la rentrée 2026-2027, les campagnes Pix de votre enfant et l’espace « IA, parentalité & parcours » pour l’accompagner dans le numérique.",
     quickLinks: [
       { label: "Calendrier scolaire", href: "#doc-calendrier" },
       { label: "Maternelle et élémentaire", href: "#rentree-1er-degre" },
@@ -56,11 +56,11 @@ window.SITE_CONTENT = {
               dates: [
                 { label: "Congé de mi-trimestre 1", date: "Du lundi 26 au samedi 31 octobre 2026" },
                 { label: "Congé de Noël et du Nouvel An", date: "Du lundi 21 décembre 2026 au vendredi 1er janvier 2027" },
-                { label: "Congé de mi-trimestre 2", date: "Du lundi 15 au vendredi 19 février 2027" },
-                { label: "Congés scolaires", date: "Du lundi 12 au vendredi 16 avril 2027" }
+                { label: "Congé de mi-trimestre 2", date: "Du lundi 15 au lundi 22 février 2027 (reprise le mardi 23)" },
+                { label: "Congés scolaires d’avril", date: "Du vendredi 9 au lundi 19 avril 2027 (reprise le mardi 20)" }
               ],
-              note: "Les autres jours de congé (fêtes religieuses et nationales) figurent sur le calendrier complet.",
-              doc: { file: "assets/docs/calendrier-scolaire-2026-2027.pdf", pages: 1, size: "183 Ko", label: "Voir le calendrier complet" }
+              note: "Les autres jours de congé (fêtes religieuses, fêtes nationales et jours de congé isolés) figurent sur le calendrier complet.",
+              doc: { file: "assets/docs/calendrier-scolaire-2026-2027.pdf", pages: 1, size: "184 Ko", label: "Voir le calendrier complet" }
             },
             {
               title: "Charte des parents",
@@ -71,7 +71,7 @@ window.SITE_CONTENT = {
                 "Les parents sont représentés aux conseils d’établissement, d’école et de classe.",
                 "Chaque parent peut adhérer au Comité des parents lors des élections."
               ],
-              doc: { file: "assets/docs/charte-des-parents-2026-2027.pdf", pages: 2, size: "333 Ko" }
+              doc: { file: "assets/docs/charte-des-parents-2026-2027.pdf", pages: 2, size: "334 Ko" }
             },
             {
               title: "Pour un dialogue réussi",
@@ -82,7 +82,7 @@ window.SITE_CONTENT = {
                 "Horaire choisi en commun ; présence de l’élève conseillée, à déterminer selon les cas.",
                 "Échanges confidentiels : l’enseignant garantit une totale discrétion."
               ],
-              doc: { file: "assets/docs/dialogue-parents-enseignants-2026-2027.pdf", pages: 2, size: "379 Ko" }
+              doc: { file: "assets/docs/dialogue-parents-enseignants-2026-2027.pdf", pages: 2, size: "380 Ko" }
             },
             {
               title: "Politique d’enseignement de la langue arabe",
@@ -93,7 +93,7 @@ window.SITE_CONTENT = {
                 "Dispense officielle du programme libanais à présenter impérativement à la rentrée de 5e.",
                 "Sans dispense : brevet libanais ; élèves dispensés ne le présentant pas : DNB."
               ],
-              doc: { file: "assets/docs/politique-enseignement-arabe-2026-2027.pdf", pages: 2, size: "324 Ko" }
+              doc: { file: "assets/docs/politique-enseignement-arabe-2026-2027.pdf", pages: 2, size: "325 Ko" }
             }
           ]
         },
@@ -110,7 +110,7 @@ window.SITE_CONTENT = {
                 "Absence de plus de 2 jours et maladie contagieuse : certificat médical à l’infirmière.",
                 "Changement d’accompagnement à la sortie : prévenir la vie scolaire par écrit avant 13h."
               ],
-              doc: { file: "assets/docs/reglement-interieur-elementaire-2026-2027.pdf", pages: 19, size: "648 Ko" }
+              doc: { file: "assets/docs/reglement-interieur-elementaire-2026-2027.pdf", pages: 19, size: "649 Ko" }
             },
             {
               title: "Consignes de rentrée élémentaire",
@@ -118,10 +118,10 @@ window.SITE_CONTENT = {
               points: [
                 "Cours de 7h45 à 14h30 (PS : accueil jusqu’à 8h) ; le portail du bâtiment B ferme à 7h45.",
                 "Service d’attente de 14h30 à 15h30 réservé aux élèves ayant une fratrie au 2nd degré.",
-                "Activités périscolaires (MS au CM2) à partir d’octobre, sortie à 15h30 au bâtiment B.",
+                "Activités périscolaires (de la MS au CM2) à partir d’octobre, sortie à 15h30 au bâtiment B.",
                 "Tenue de sport obligatoire en EPS, disponible chez « Cotton Mall » à Mtayleb."
               ],
-              doc: { file: "assets/docs/consignes-rentree-elementaire-2026.pdf", pages: 6, size: "394 Ko" }
+              doc: { file: "assets/docs/consignes-rentree-elementaire-2026.pdf", pages: 6, size: "395 Ko" }
             },
             {
               title: "Fonctionnement de la BCD",
@@ -142,10 +142,10 @@ window.SITE_CONTENT = {
                 "Club lecture deux fois par semaine pendant les récréations, du CE1 au CM2."
               ],
               links: [
-                { label: "Catalogue de la BCD sur Esidoc (français et anglais)", url: "https://2050048n.esidoc.fr/" },
+                { label: "Catalogue de la BCD sur e-sidoc (français et anglais)", url: "https://2050048n.esidoc.fr/" },
                 { label: "Catalogue de la BCD sur Datarays (arabe)", url: "http://lyceemontaignebo.datarays.co/publicforms/SearchBooks.aspx" }
               ],
-              doc: { file: "assets/docs/bcd-pret-livres-parents-2026-2027.pdf", pages: 2, size: "264 Ko" }
+              doc: { file: "assets/docs/bcd-pret-livres-parents-2026-2027.pdf", pages: 2, size: "265 Ko" }
             }
           ]
         },
@@ -162,28 +162,28 @@ window.SITE_CONTENT = {
                 "Téléphone éteint et déposé dans les boîtes sécurisées prévues, dès l’arrivée.",
                 "Moyenne annuelle de 10 : seuil conditionnel de réinscription en classe supérieure."
               ],
-              doc: { file: "assets/docs/reglement-interieur-college-lycee-2026-2027.pdf", pages: 12, size: "916 Ko" }
+              doc: { file: "assets/docs/reglement-interieur-college-lycee-2026-2027.pdf", pages: 12, size: "917 Ko" }
             },
             {
               title: "Consignes de rentrée collège-lycée",
               text: "Lettre de la Direction aux parents pour la rentrée 2026-2027 au collège-lycée : premiers jours, arrivée et sortie des élèves, horaires, transport, restauration, tenue de sport et sécurité.",
               points: [
                 "Accueil dès 7h15 : bâtiment A si fratrie au bâtiment B, sinon porte du gymnase au -2.",
-                "Sortie anticipée : demande écrite 24h avant (Pronote ou courriel), pas par téléphone.",
-                "Options (LVC, EPS, Arts plastiques, SI/CIT) dès le 21 septembre ; périscolaire en octobre."
+                "Sortie anticipée : demande écrite 24 heures avant (Pronote ou courriel), pas par téléphone.",
+                "Options (LVC, EPS, arts plastiques, SI/CIT) dès le 21 septembre ; périscolaire en octobre."
               ],
-              doc: { file: "assets/docs/consignes-rentree-college-lycee-2026.pdf", pages: 3, size: "341 Ko" }
+              doc: { file: "assets/docs/consignes-rentree-college-lycee-2026.pdf", pages: 3, size: "342 Ko" }
             },
             {
               title: "Le CCC : structure, rôle et activités",
               text: "Présentation du Centre de Connaissances et de Culture (CCC) du collège-lycée : horaires, accès, prêt, espaces, ressources, abonnements et contacts des professeures documentalistes.",
               points: [
-                "Ouvert tous les jours de 8h00 à 15h30, au 2e étage du bâtiment A.",
+                "Ouvert tous les jours de 8h à 15h30, au 2e étage du bâtiment A.",
                 "Accès pendant les récréations, les heures de permanence ou dans le cadre d’un cours.",
                 "Prêt de 3 livres maximum par élève, pour une durée de 15 jours.",
-                "En ligne via E-sidoc et Datarays (Pronote) : recherche, disponibilité, nouveautés."
+                "En ligne via e-sidoc et Datarays (Pronote) : recherche, disponibilité, nouveautés."
               ],
-              doc: { file: "assets/docs/ccc-note-de-service-2026-2027.pdf", pages: 1, size: "563 Ko" }
+              doc: { file: "assets/docs/ccc-note-de-service-2026-2027.pdf", pages: 1, size: "564 Ko" }
             },
             {
               title: "Prêt de livres du CCC",
@@ -194,7 +194,7 @@ window.SITE_CONTENT = {
                 "En cas de retard, des rappels sont adressés à l’élève et à sa famille.",
                 "Tout document perdu ou détérioré devra être remplacé ou remboursé."
               ],
-              doc: { file: "assets/docs/ccc-pret-livres-2026-2027.pdf", pages: 1, size: "509 Ko" }
+              doc: { file: "assets/docs/ccc-pret-livres-2026-2027.pdf", pages: 1, size: "511 Ko" }
             }
           ]
         },
@@ -207,34 +207,34 @@ window.SITE_CONTENT = {
               tag: "Numérique",
               title: "Les outils numériques aux parents",
               wide: true,
-              text: "Accès direct aux tutoriels des différents outils numériques (Pronote, Office, Teams…).\n\nNote d’information présentant les espaces numériques du Lycée : Pronote pour les parents et les élèves de la 6e à la Terminale, Office 365 pour les élèves du CP à la Terminale, Class Dojo et Zoom pour les PS-GS.",
+              text: "Accès direct aux tutoriels des différents outils numériques (Pronote, Office, Teams…).\n\nNote d’information présentant les espaces numériques du Lycée : Pronote pour les parents et les élèves de la 6e à la Terminale, Office 365 pour les élèves du CP à la Terminale, ClassDojo et Zoom pour les PS-GS.",
               points: [
-                "Codes Pronote : codes parents envoyés par mail, codes élèves remis directement aux élèves.",
-                "Accès à Pronote et Office 365 à partir de septembre 2026, identifiants transmis par mail.",
+                "Codes Pronote : codes parents envoyés par courriel, codes élèves remis directement aux élèves.",
+                "Accès à Pronote et Office 365 à partir de septembre 2026, identifiants transmis par courriel.",
                 "Les comptes parents sont individuels et ne doivent jamais être transmis aux élèves.",
-                "En cas de difficulté : M. Raed El Kady (informatique), raed.elkady@lycee-montaigne.edu.lb"
+                "En cas de difficulté, contacter M. Raed El Kady (informatique) : raed.elkady@lycee-montaigne.edu.lb."
               ],
               links: [
                 { label: "Tutoriel : accéder à Pronote depuis un ordinateur", url: "https://lyceemontaigneedulb.sharepoint.com/:b:/s/Montaigne/IQBhxop9_a-8QpnZd875BCG4AUs7bDsfjDe7I98VVm-_Tl8?e=zK6KhV" },
                 { label: "Tutoriel : application Pronote sur téléphone", url: "https://lyceemontaigneedulb.sharepoint.com/:b:/s/Montaigne/IQCHGy_uXPlGTpAzV9ZGS0ZhAfJejvnYAQaO07tkiSb4K7g?e=sbqZOU" },
                 { label: "Tutoriel : réinitialiser son mot de passe Pronote", url: "https://lyceemontaigneedulb.sharepoint.com/:b:/s/Montaigne/IQCx5g_sZmsRS5y0hVjQJdfaAU_fgBlBqTTD7mPzFid58b0?e=lcBEnS" },
                 { label: "Tutoriel : Office 365 (élèves CP-Terminale)", url: "https://lyceemontaigneedulb.sharepoint.com/:f:/s/Montaigne/IgCz_vx03AbVRbBuJvK7QCsJAdnhZeFZOpEO8RcXI-BkKb0?e=aYxJjf" },
-                { label: "Tutoriel : Class Dojo (PS-GS)", url: "https://lyceemontaigneedulb.sharepoint.com/:b:/s/Montaigne/IQCSxWYnvIjkR7hIZVNV7JAuAf5DSQdgHBtiFO-azitROdk?e=ajFxnN" },
+                { label: "Tutoriel : ClassDojo (PS-GS)", url: "https://lyceemontaigneedulb.sharepoint.com/:b:/s/Montaigne/IQCSxWYnvIjkR7hIZVNV7JAuAf5DSQdgHBtiFO-azitROdk?e=ajFxnN" },
                 { label: "Tutoriel : Zoom (PS-GS)", url: "https://lyceemontaigneedulb.sharepoint.com/:b:/s/Montaigne/IQCP9BnyfSOKTLmAIMXlG81IAefvr8b0iU1-dmNfeS0lWbk?e=bOUdBn" }
               ],
-              doc: { file: "assets/docs/outils-numeriques-parents.pdf", pages: 2, size: "87 Ko" }
+              doc: { file: "assets/docs/outils-numeriques-parents.pdf", pages: 2, size: "89 Ko" }
             },
             {
               tag: "Service financier",
               title: "Procédure de demande d’attestation",
               text: "Note du service financier expliquant comment demander une attestation scolaire, avec ou sans mention des frais scolaires : à qui écrire, informations à fournir et délais de retrait.",
               points: [
-                "Avec mention des frais : mail au service financier (nom de l’enfant, classe, année).",
+                "Avec mention des frais : courriel au service financier (nom de l’enfant, classe, année).",
                 "Retrait au service financier 5 jours après réception, par vous ou un tiers désigné.",
-                "Sans mention des frais : secrétariat, Direction en CC ; retrait bâtiment A après 2 jours.",
-                "Si un formulaire spécifique est exigé, joindre une copie numérisée au mail de demande."
+                "Sans mention des frais : courriel au secrétariat, Direction en copie ; retrait à l’accueil du bâtiment A après 2 jours.",
+                "Si un formulaire spécifique est exigé, joindre une copie numérisée au courriel de demande."
               ],
-              doc: { file: "assets/docs/demande-attestation-scolaire.pdf", pages: 1, size: "153 Ko" }
+              doc: { file: "assets/docs/demande-attestation-scolaire.pdf", pages: 1, size: "154 Ko" }
             }
           ]
         }
@@ -251,7 +251,7 @@ window.SITE_CONTENT = {
       navLabel: "IA & parentalité",
       eyebrow: "Pix et intelligence artificielle",
       title: "IA, parentalité & parcours",
-      lead: "Accompagner votre enfant avec Pix : parcours élèves, nouveautés IA, défis pour les parents, calendrier et aides pas-à-pas.",
+      lead: "Les campagnes Pix de rentrée par niveau, le parcours IA et des ressources pour accompagner le numérique en famille.",
       summary: "Campagnes Pix par niveau, parcours IA, ressources pour accompagner votre enfant",
       source: {
         label: "Padlet « IA, parentalité, parcours »",
@@ -286,13 +286,13 @@ window.SITE_CONTENT = {
             {
               tag: "Pix élève",
               title: "Réinitialiser mon mot de passe Pix",
-              text: "Tutoriel illustré en 7 étapes pour réinitialiser son mot de passe Pix à partir de l’adresse mail du Lycée, en passant par la messagerie Outlook (Office 365).",
+              text: "Tutoriel illustré en 7 étapes pour réinitialiser son mot de passe Pix à partir de l’adresse électronique du lycée, en passant par la messagerie Outlook (Office 365).",
               points: [
-                "Sur Pix, cliquer sur « Mot de passe oublié ? » puis saisir l’adresse mail du lycée.",
-                "Dans Outlook (Office 365), ouvrir le mail de Pix puis « Définir un nouveau mot de passe ».",
-                "Le lien de réinitialisation reçu par mail est valide 24 heures."
+                "Sur Pix, cliquer sur « Mot de passe oublié ? » puis saisir l’adresse électronique du lycée.",
+                "Dans Outlook (Office 365), ouvrir le courriel de Pix puis « Définir un nouveau mot de passe ».",
+                "Le lien de réinitialisation reçu par courriel est valide 24 heures."
               ],
-              doc: { file: "assets/docs/pix-reinitialiser-mot-de-passe.pdf", pages: 2, size: "342 Ko" }
+              doc: { file: "assets/docs/pix-reinitialiser-mot-de-passe.pdf", pages: 2, size: "343 Ko" }
             }
           ]
         },
@@ -303,7 +303,7 @@ window.SITE_CONTENT = {
           items: [
             { when: "Sept.–oct. 2026", text: "Parcours de rentrée." },
             { when: "Toute l’année", text: "Entraînements ciblés selon les cours." },
-            { when: "Depuis janv. 2026", text: "Déploiement obligatoire des modules **Pix IA** (4e, 2nde, CAP) selon le calendrier ministériel." }
+            { when: "Depuis janv. 2026", text: "Déploiement obligatoire des modules **Pix IA** (4e, 2de, CAP) selon le calendrier ministériel." }
           ]
         },
         {
@@ -317,9 +317,9 @@ window.SITE_CONTENT = {
             },
             {
               title: "La certification Pix",
-              text: "Dépliant de Pix (rentrée 2025) présentant la Certification Pix : format de l’épreuve, niveaux attendus en 3e et en Terminale, intérêt du certificat et grandes étapes dans l’établissement.",
+              text: "Dépliant de Pix (rentrée 2025) présentant la certification Pix : format de l’épreuve, niveaux attendus en 3e et en Terminale, intérêt du certificat et grandes étapes dans l’établissement.",
               points: [
-                "Épreuve de 32 questions, 1 h 45 maximum hors tiers-temps, sur un navigateur sécurisé.",
+                "Épreuve de 32 questions, 1h45 maximum hors tiers-temps, sur un navigateur sécurisé.",
                 "Niveau global attendu : 3 en 3e, 4 en Terminale (note de service du 23-10-2024).",
                 "Certification des élèves de 3e, de Terminale et post-bac, passée dans l’établissement.",
                 "Score reporté automatiquement dans le livret scolaire et, en Terminale, sur Parcoursup."
@@ -328,7 +328,7 @@ window.SITE_CONTENT = {
                 { label: "Repères de score Pix pour chaque niveau", url: "https://pix.fr/certification-comprendre-score-niveau" },
                 { label: "Note de service du 23-10-2024", url: "https://www.education.gouv.fr/bo/2024/Hebdo43/MENE2421869N" }
               ],
-              doc: { file: "assets/docs/pix-certification-flyer.pdf", pages: 2, size: "886 Ko", label: "Ouvrir le flyer" }
+              doc: { file: "assets/docs/pix-certification-flyer.pdf", pages: 2, size: "888 Ko", label: "Ouvrir le dépliant" }
             }
           ]
         },
@@ -340,7 +340,7 @@ window.SITE_CONTENT = {
               tag: "Nouveau",
               title: "Parcours « Pix IA »",
               text: "À la rentrée 2025, Pix lance des modules sur l’intelligence artificielle (IA) pour les collégiens et lycéens : compréhension des IA génératives, usages responsables, limites et sécurité.",
-              links: [{ label: "L’actualité Pix de la rentrée (DANE de Lille)", url: "https://dane.site.ac-lille.fr/2025/09/10/lactualite-pix-pour-la-rentree-25-26/" }]
+              links: [{ label: "L’actualité Pix de la rentrée 2025 (DANE de Lille)", url: "https://dane.site.ac-lille.fr/2025/09/10/lactualite-pix-pour-la-rentree-25-26/" }]
             },
             {
               title: "Pourquoi un parcours IA ?",
