@@ -171,9 +171,9 @@
 
   function dateList(dates) {
     if (!dates || !dates.length) return null;
-    return el("dl", { className: "dates" }, [].concat.apply([], dates.map(function (d) {
-      return [el("dt", { text: d.label }), el("dd", { text: d.date })];
-    })));
+    return el("dl", { className: "dates" }, dates.map(function (d) {
+      return el("div", { className: "date-item" }, [el("dt", { text: d.label }), el("dd", { text: d.date })]);
+    }));
   }
 
   function get(path) {

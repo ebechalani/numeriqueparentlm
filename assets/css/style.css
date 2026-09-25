@@ -599,8 +599,12 @@ main:focus { outline: none; }
   font-weight: 600;
   color: var(--ink);
 }
-.dates > dt { padding: 12px 14px 0; background: var(--bg); border-radius: var(--radius-sm) var(--radius-sm) 0 0; border: 1px solid var(--line); border-bottom: 0; }
-.dates > dd { padding: 0 14px 12px; background: var(--bg); border-radius: 0 0 var(--radius-sm) var(--radius-sm); border: 1px solid var(--line); border-top: 0; }
+.date-item {
+  padding: 12px 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
 
 /* ---------- Message d’accueil ---------- */
 
