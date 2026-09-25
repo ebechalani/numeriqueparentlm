@@ -1,20 +1,53 @@
 # Espace parents · Lycée Montaigne
 
-Site d’information à destination des familles, qui réunit sur une seule page :
+Site d’information à destination des familles, qui réunit sur une seule page le contenu de deux padlets :
 
-1. **Bonne rentrée 2026** : les informations pratiques de rentrée
-   ([padlet d’origine](https://padlet.com/micha_semaan/bonne-rentree-2026-s02374j2htrj9svmdi3m)) ;
-2. **IA & parentalité : le parcours** : le parcours numérique proposé aux parents
-   ([padlet d’origine](https://padlet.com/ebechalani/lycee-montaigne-ia-parentalite-parcours-2omrt3gchvn7v0dp)).
+1. **Bonne rentrée 2026**, réalisé par Micheline Semaan
+   ([padlet d’origine](https://padlet.com/micha_semaan/bonne-rentree-2026-s02374j2htrj9svmdi3m)) :
+   calendrier, chartes, règlements intérieurs, consignes de rentrée, BCD, CCC, outils numériques
+   et démarches administratives ;
+2. **IA, parentalité & parcours**, réalisé par Eddy Bachaalany
+   ([padlet d’origine](https://padlet.com/ebechalani/lycee-montaigne-ia-parentalite-parcours-2omrt3gchvn7v0dp)) :
+   campagnes Pix par niveau, parcours IA et ressources pour les parents.
+
+Conception et réalisation du site : Eddy Bachaalany.
 
 Le site est statique (HTML, CSS, JavaScript) : aucune installation n’est nécessaire.
 
+## Organisation des fichiers
+
+| Fichier | Rôle |
+| --- | --- |
+| `index.html` | Structure de la page |
+| `assets/js/content.js` | **Tous les textes et liens du site** : le seul fichier à modifier au quotidien |
+| `assets/js/app.js` | Affichage du contenu (rien à modifier) |
+| `assets/css/style.css` | Mise en forme |
+| `assets/docs/` | Les documents PDF, hébergés avec le site |
+
+Les PDF sont copiés dans `assets/docs/` parce que les liens de téléchargement des padlets
+sont temporaires : ils expirent au bout de quelques jours.
+
 ## Modifier le contenu
 
-Tous les textes se trouvent dans **`assets/js/content.js`**. Chaque rubrique contient :
+Dans `assets/js/content.js`, chaque rubrique contient des groupes. Un groupe peut être :
 
-- des **groupes de cartes** (`layout: "cards"`), un groupe par colonne du padlet ;
-- ou des **étapes numérotées** (`layout: "steps"`), pour un parcours.
+- une grille de **cartes** (par défaut) ;
+- une grille de **niveaux** (`layout: "levels"`), utilisée pour les campagnes Pix ;
+- une **frise** (`layout: "timeline"`), utilisée pour le calendrier Pix.
+
+Une carte peut contenir :
+
+```js
+{
+  id: "doc-exemple",                    // facultatif : ancre pour un lien direct (#doc-exemple)
+  tag: "Nouveau",                        // facultatif : petite étiquette
+  title: "Titre de la carte",
+  text: "Texte libre (voir la mise en forme ci-dessous).",
+  points: ["Point clé 1", "Point clé 2"],
+  links: [{ label: "Texte du lien", url: "https://…" }],
+  doc: { file: "assets/docs/mon-document.pdf", pages: 2, size: "333 Ko" }
+}
+```
 
 Dans les textes :
 
@@ -22,13 +55,12 @@ Dans les textes :
 | --- | --- |
 | une ligne vide | nouveau paragraphe |
 | `- élément` en début de ligne | liste à puces |
+| `1. élément` en début de ligne | liste numérotée |
 | `**texte**` | texte en gras |
 | `https://…` | lien cliquable |
 
-Des boutons de lien s’ajoutent avec `links: [{ label: "…", url: "https://…" }]`.
-
-Une fois le contenu définitif saisi, retirer les `placeholder: true` et passer
-`draft` à `false` dans `meta` pour masquer le bandeau « Version de travail ».
+**Ajouter un document :** déposer le PDF dans `assets/docs/` (nom sans espaces ni accents),
+puis ajouter une carte avec `doc: { file: "assets/docs/nom-du-fichier.pdf", … }`.
 
 ## Voir le site en local
 
@@ -37,10 +69,13 @@ Ouvrir `index.html` dans un navigateur.
 ## Mettre le site en ligne (GitHub Pages)
 
 1. Sur GitHub, ouvrir **Settings → Pages**.
-2. Dans **Build and deployment**, choisir **Deploy from a branch**, la branche `main`
+2. Dans **Build and deployment**, choisir **Deploy from a branch**, la branche principale
    et le dossier `/ (root)`.
 3. Le site est publié au bout d’une minute environ à l’adresse
    `https://ebechalani.github.io/numeriqueparentlm/`, un lien à envoyer aux parents.
+
+La page demande aux moteurs de recherche de ne pas l’indexer (`<meta name="robots" content="noindex">`
+dans `index.html`) : elle reste accessible à toute personne qui a le lien, sans apparaître dans Google.
 
 ## Fonctionnalités
 
