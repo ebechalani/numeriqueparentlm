@@ -301,7 +301,7 @@ window.SITE_CONTENT = {
           title: "Calendrier & attentes",
           layout: "timeline",
           items: [
-            { when: "Sept.–oct. 2025", text: "Parcours de rentrée." },
+            { when: "Sept.–oct. 2026", text: "Parcours de rentrée." },
             { when: "Toute l’année", text: "Entraînements ciblés selon les cours." },
             { when: "Dès janv. 2026", text: "Déploiement obligatoire des modules **Pix IA** (4e, 2nde, CAP) selon le calendrier ministériel." }
           ]
