@@ -23,6 +23,8 @@ Le site est statique (HTML, CSS, JavaScript) : aucune installation n’est néce
 | `assets/js/app.js` | Affichage du contenu (rien à modifier) |
 | `assets/css/style.css` | Mise en forme |
 | `assets/docs/` | Les documents PDF, hébergés avec le site |
+| `assets/img/` | Logos (Lycée Montaigne, 15 ans, réseau mlfmonde, AEFE) et icône d’onglet |
+| `assets/fonts/` | Polices Inter et Fraunces (licence SIL Open Font License, fichiers `LICENSE-*.txt`) |
 
 Les PDF sont copiés dans `assets/docs/` parce que les liens de téléchargement des padlets
 sont temporaires : ils expirent au bout de quelques jours.
@@ -59,12 +61,30 @@ Dans les textes :
 | `**texte**` | texte en gras |
 | `https://…` | lien cliquable |
 
+La typographie française (espaces insécables avant « : ; ? ! », dans les guillemets, entre un
+nombre et son unité) est ajoutée automatiquement à l’affichage : inutile de la saisir.
+
 **Ajouter un document :** déposer le PDF dans `assets/docs/` (nom sans espaces ni accents),
 puis ajouter une carte avec `doc: { file: "assets/docs/nom-du-fichier.pdf", … }`.
 
+**Après chaque modification**, vérifier qu’il ne manque ni virgule ni guillemet :
+
+```sh
+node --check assets/js/content.js
+```
+
+En cas d’erreur dans ce fichier, la page affiche un message de secours avec les liens vers les padlets.
+
 ## Voir le site en local
 
-Ouvrir `index.html` dans un navigateur.
+Ouvrir `index.html` dans un navigateur suffit pour relire le contenu. Pour un rendu identique au site
+en ligne (avec les polices), lancer un petit serveur depuis le dossier du site :
+
+```sh
+python3 -m http.server 8000
+```
+
+puis ouvrir http://localhost:8000.
 
 ## Mettre le site en ligne (GitHub Pages)
 
