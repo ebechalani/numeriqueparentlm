@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" class="no-js">
+<html lang="fr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,6 +17,8 @@
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/style.css">
+  <!-- Sans JavaScript : on montre le message de secours et on masque ce qui ne fonctionnerait pas. -->
+  <noscript><style>.fallback[hidden] { display: block; } .hero, .nav-toggle, .site-nav, .footer-sources, .footer-bottom { display: none; }</style></noscript>
 </head>
 <body id="haut">
   <a class="skip-link" href="#contenu">Aller au contenu</a>
@@ -65,7 +67,8 @@
     <div id="sections"></div>
 
     <!-- Affiché seulement si le contenu n'a pas pu être généré (JavaScript désactivé ou erreur dans content.js). -->
-    <div class="container fallback">
+    <div class="container fallback" hidden>
+      <h1 class="fallback-title">Espace parents</h1>
       <p>Le contenu de cette page n’a pas pu s’afficher. Vous pouvez consulter directement les padlets d’origine&#8239;:</p>
       <ul>
         <li><a href="https://padlet.com/micha_semaan/bonne-rentree-2026-s02374j2htrj9svmdi3m">Bonne rentrée 2026</a></li>
@@ -112,6 +115,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="assets/js/content.js"></script>
-  <script src="assets/js/app.js"></script>
+  <script src="assets/js/app.js" onerror="document.querySelector('.fallback').hidden = false; document.documentElement.className += ' render-failed';"></script>
 </body>
 </html>
